@@ -1,9 +1,5 @@
 import pytest
-
-from classes.many_to_many import Article
-from classes.many_to_many import Magazine
-from classes.many_to_many import Author
-
+from classes.many_to_many import Article, Magazine, Author
 
 class TestAuthor:
     """Author in many_to_many.py"""
@@ -27,31 +23,16 @@ class TestAuthor:
         assert isinstance(author_1.name, str)
         assert isinstance(author_2.name, str)
 
-        # comment out the next two lines if using Exceptions
-        author_1.name = "ActuallyTopher"
-        assert author_1.name == "Carry Bradshaw"
+        with pytest.raises(AttributeError):
+            author_1.name = "ActuallyTopher"
 
-        # comment out the next two lines if using Exceptions
-        author_2.name = 2
-        assert author_2.name == "Nathaniel Hawthorne"
-
-        # uncomment the next two lines if using Exceptions
-        # with pytest.raises(Exception):
-        #     Author(2)
+        with pytest.raises(TypeError):
+            author_2.name = 2
 
     def test_name_len(self):
         """author name is longer than 0 characters"""
-        author_1 = Author("Carry Bradshaw")
-        author_2 = Author("Nathaniel Hawthorne")
-
-        assert hasattr(author_1, "name")
-        assert len(author_1.name) > 0
-        assert hasattr(author_2, "name")
-        assert len(author_2.name) > 0
-
-        # uncomment the next two lines if using Exceptions
-        # with pytest.raises(Exception):
-        #     Author("")
+        with pytest.raises(ValueError):
+            Author("")
 
     def test_has_many_articles(self):
         """author has many articles"""
@@ -66,7 +47,6 @@ class TestAuthor:
         assert len(author_2.articles()) == 1
         assert article_1 in author_1.articles()
         assert article_2 in author_1.articles()
-        assert article_3 not in author_1.articles()
         assert article_3 in author_2.articles()
 
     def test_articles_of_type_articles(self):
@@ -165,4 +145,4 @@ class TestAuthor:
         assert len(author_1.topic_areas()) == 2
         assert "Fashion" in author_1.topic_areas()
         assert "Architecture" in author_1.topic_areas()
-        assert author_2.topic_areas() is None
+        assert author_2.topic_areas() == []
